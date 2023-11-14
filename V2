@@ -1,0 +1,256 @@
+# This file contains common pin mappings for the BIGTREETECH SKR mini
+# E3 v3.0. To use this config, the firmware should be compiled for the
+# STM32G0B1 with a "8KiB bootloader" and USB communication/USART.
+
+# The "make flash" command does not work on the SKR mini E3. Instead,
+# after running "make", copy the generated "out/klipper.bin" file to a
+# file named "firmware.bin" on an SD card and then restart the SKR
+# mini E3 with that SD card.
+
+######################################################################
+                   ###  INCLUDE  ###
+######################################################################
+######################################################################
+
+[include mainsail.cfg]
+
+######################################################################
+######################################################################
+                  #  STEPPER HEATER / MOTOR
+######################################################################
+######################################################################
+
+[stepper_a]
+step_pin: PB13
+dir_pin: !PB12
+enable_pin: !PB14
+microsteps: 16
+rotation_distance: 32
+endstop_pin: ^!PC0
+position_endstop: 0
+homing_speed: 20
+arm_length: 333.0
+
+[tmc2209 stepper_a]
+uart_pin: PC11
+tx_pin: PC10
+uart_address: 0
+run_current: 0.35
+hold_current: 0.35
+stealthchop_threshold: 0
+
+[stepper_b]
+step_pin: PB10
+dir_pin: PB2
+enable_pin: !PB11
+microsteps: 16
+rotation_distance: 32
+endstop_pin: ^!PC1
+
+[tmc2209 stepper_b]
+uart_pin: PC11
+tx_pin: PC10
+uart_address: 2
+run_current: 0.35
+hold_current: 0.35
+stealthchop_threshold: 0
+
+[stepper_c]
+step_pin: PB0
+dir_pin: !PC5
+enable_pin: !PB1
+microsteps: 16
+rotation_distance: 32
+endstop_pin: ^!PC2
+
+[tmc2209 stepper_c]
+uart_pin: PC11
+tx_pin: PC10
+uart_address: 1
+run_current: 0.35
+hold_current: 0.35
+stealthchop_threshold: 0
+
+######################################################################
+######################################################################
+                  #  EXTRUDER HEATER / MOTOR
+######################################################################
+######################################################################
+
+[extruder]
+step_pin: PB3
+dir_pin: PB4
+enable_pin: !PD1
+microsteps: 16
+rotation_distance: 33.500
+nozzle_diameter: 0.400
+filament_diameter: 1.750
+heater_pin: PC9
+sensor_type: Generic 3950   #EPCOS 100K B57560G104F
+sensor_pin: PA0
+control: pid
+pid_Kp: 21.527
+pid_Ki: 1.063
+pid_Kd: 108.982
+min_temp: 5
+max_temp: 280
+#max_extrude_cross_section: 50
+#max_extrude_only_distance: 8000
+
+[heater_bed]
+heater_pin: PH5
+sensor_type: EPCOS 100K B57560G104F
+sensor_pin: PK6
+control: watermark
+min_temp: 0
+max_temp: 130
+
+[tmc2209 extruder]
+uart_pin: PC11
+tx_pin: PC10
+uart_address: 3
+run_current: 0.4
+hold_current: 0.4
+stealthchop_threshold: 0
+
+######################################################################
+######################################################################
+                  #  FAN
+######################################################################
+######################################################################
+
+[heater_fan Nozzle_Cooling_Fan]
+pin: PB15
+
+[heater_fan Extruder]
+pin: PC6
+kick_start_time: 0.500
+heater: extruder
+heater_temp: 50.0
+
+[controller_fan Mainboard_Fan]
+pin: PC7
+max_power: 1
+cycle_time: 0.01
+kick_start_time:0.2
+fan_speed: 1 #0.6
+heater: extruder
+
+#[fan]
+#pin: PC6
+###Check configuration for [fan] & [heater_fan Extruder]_heater: extruder
+
+######################################################################
+######################################################################
+                  #  MCU
+######################################################################
+######################################################################
+
+[mcu]
+serial: /dev/serial/by-id/usb-Klipper_stm32g0b1xx_49000B0011504B5735313920-if00
+
+######################################################################
+######################################################################
+                  #  TEMPARATURE-SENSORS
+######################################################################
+######################################################################
+
+[temperature_sensor raspberry_pi]
+sensor_type: temperature_host
+min_temp: 10
+max_temp: 80
+
+[temperature_sensor mcu_temp]
+sensor_type: temperature_mcu
+min_temp: 10
+max_temp: 80
+
+######################################################################
+######################################################################
+                  #  PRINTER SETTINGS
+######################################################################
+######################################################################
+
+[printer]
+kinematics: delta
+max_velocity: 300
+max_accel: 1200
+max_z_velocity: 60
+max_z_accel: 100
+delta_radius: 75
+
+######################################################################
+######################################################################
+                  #  CALIBRATE/PROBE
+######################################################################
+######################################################################
+
+[probe]
+pin: ^PC14
+x_offset = 0
+y_offset = 0
+z_offset = -2
+
+[delta_calibrate]
+radius: 75
+speed: 20
+horizontal_move_z: 35
+
+######################################################################
+######################################################################
+                   ###  BOARD-PINS  ###
+######################################################################
+######################################################################
+
+[board_pins]
+aliases:
+    # EXP1 header
+    EXP1_1=PB5,  EXP1_3=PA9,   EXP1_5=PA10, EXP1_7=PB8, EXP1_9=<GND>,
+    EXP1_2=PA15, EXP1_4=<RST>, EXP1_6=PB9,  EXP1_8=PD6, EXP1_10=<5V>
+
+######################################################################
+######################################################################
+                        ###   Macros  ###
+######################################################################
+######################################################################
+
+[gcode_macro M600]
+gcode:
+  PAUSE   ; everything needed is defined there
+ 
+[gcode_macro M900]
+gcode:
+    {% set K = params.K|default(0)|float %}
+	SET_PRESSURE_ADVANCE ADVANCE={K}
+
+######################################################################
+######################################################################
+                   ###   KNÖPFE  ###
+######################################################################
+######################################################################
+
+[gcode_macro _buttonBlocker]
+variable_init: 0
+gcode:
+
+[delayed_gcode init_gcodeButtons]
+initial_duration: 2.
+gcode:
+	SET_GCODE_VARIABLE MACRO=_buttonBlocker VARIABLE=init VALUE=1
+
+[gcode_button play]
+pin: ^!PC13
+press_gcode:
+	{% if printer["gcode_macro _buttonBlocker"].init %}
+		{ action_respond_info("Button 'Resume/Pause' pressed.") }
+		{% if printer.idle_timeout.state == "Printing" %}
+			PAUSE
+            { action_respond_info("Button 'PAUSE' pressed.") }
+		{% else %}
+             { action_respond_info("Button 'Resume' pressed.") }
+             RESUME
+		{% endif %}
+    {% endif %}
+release_gcode:
+
+
