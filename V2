@@ -27,8 +27,8 @@ enable_pin: !PB14
 microsteps: 16
 rotation_distance: 32
 endstop_pin: ^!PC0
-position_endstop: 0
 homing_speed: 20
+position_endstop: 201.838271
 arm_length: 333.0
 
 [tmc2209 stepper_a]
