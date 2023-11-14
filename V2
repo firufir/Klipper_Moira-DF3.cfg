@@ -28,8 +28,9 @@ microsteps: 16
 rotation_distance: 32
 endstop_pin: ^!PC0
 homing_speed: 20
-position_endstop: 201.838271
-arm_length: 333.0
+position_endstop: 202.048007
+arm_length: 186.155918
+angle: 208.680347
 
 [tmc2209 stepper_a]
 uart_pin: PC11
@@ -46,6 +47,9 @@ enable_pin: !PB11
 microsteps: 16
 rotation_distance: 32
 endstop_pin: ^!PC1
+#position_endstop: 200.335242
+#arm_length: 190.667295
+#angle: 328.989779
 
 [tmc2209 stepper_b]
 uart_pin: PC11
@@ -62,6 +66,9 @@ enable_pin: !PB1
 microsteps: 16
 rotation_distance: 32
 endstop_pin: ^!PC2
+#position_endstop: 201.838271
+#arm_length: 188.577779
+#angle: 90.000000
 
 [tmc2209 stepper_c]
 uart_pin: PC11
@@ -173,7 +180,7 @@ delta_radius: 75
 
 [probe]
 pin: ^PC14
-z_offset = -1.350
+z_offset: -1.350 
 
 [delta_calibrate]
 radius: 50
@@ -306,5 +313,3 @@ press_gcode:
 		{% endif %}
     {% endif %}
 release_gcode:
-
-
