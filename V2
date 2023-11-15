@@ -30,7 +30,6 @@ endstop_pin: ^!PC0
 homing_speed: 20
 position_endstop: 202.048007
 arm_length: 186.155918
-#angle: 208.680347
 
 [tmc2209 stepper_a]
 uart_pin: PC11
@@ -47,9 +46,6 @@ enable_pin: !PB11
 microsteps: 16
 rotation_distance: 32
 endstop_pin: ^!PC1
-#position_endstop: 200.335242
-#arm_length: 190.667295
-#angle: 328.989779
 
 [tmc2209 stepper_b]
 uart_pin: PC11
@@ -66,9 +62,6 @@ enable_pin: !PB1
 microsteps: 16
 rotation_distance: 32
 endstop_pin: ^!PC2
-#position_endstop: 201.838271
-#arm_length: 188.577779
-#angle: 90.000000
 
 [tmc2209 stepper_c]
 uart_pin: PC11
@@ -86,19 +79,19 @@ stealthchop_threshold: 0
 
 [extruder]
 step_pin: PB3
-dir_pin: PB4
-enable_pin: !PD1
+dir_pin: !PB4
+enable_pin: !PD1 
 microsteps: 16
-rotation_distance: 33.500
-nozzle_diameter: 0.400
+rotation_distance: 33.5
+nozzle_diameter: 0.600
 filament_diameter: 1.750
 heater_pin: PC8
 sensor_type: Generic 3950   #EPCOS 100K B57560G104F
 sensor_pin: PA0
 control: pid
-pid_Kp: 21.527
-pid_Ki: 1.063
-pid_Kd: 108.982
+pid_Kp: 22.219
+pid_Ki: 0.920
+pid_Kd: 134.148
 min_temp: 5
 max_temp: 280
 
@@ -196,7 +189,7 @@ horizontal_move_z: 5
 [bed_mesh]
 speed: 20
 horizontal_move_z: 5
-mesh_radius: 40
+mesh_radius: 50
 mesh_origin: 0, 0
 round_probe_count: 9
 fade_start: 1.0
@@ -229,7 +222,7 @@ aliases:
 [gcode_macro LOAD_FILAMENT]
 gcode:
     M83
-    G1 E330 F3000 #1800
+    G1 E50 F1800
     G1 E30 F300
     G1 E20 F60
     M82
@@ -265,16 +258,13 @@ gcode:
 description: Resume the actual running print
 rename_existing: RESUME_BASE
 gcode:
-  ##### read extrude from  _TOOLHEAD_PARK_PAUSE_CANCEL  macro #####
 
   {% set extrude = printer['gcode_macro _TOOLHEAD_PARK_PAUSE_CANCEL'].extrude %}
-  #### get VELOCITY parameter if specified ####
   {% if 'VELOCITY' in params|upper %}
     {% set get_params = ('VELOCITY=' + params.VELOCITY)  %}
   {%else %}
     {% set get_params = "" %}
   {% endif %}
-  ##### end of definitions #####
   {% if printer.extruder.can_extrude|lower == 'true' %}
     M83
     G1 E{extrude} F2100
@@ -290,16 +280,12 @@ description: Cancel the actual running print
 rename_existing: CANCEL_PRINT_BASE
 variable_park: True
 gcode:
-  ## Move head and retract only if not already in the pause state and park set to true
-
-  {% if printer.pause_resume.is_paused|lower == 'false' and park|lower == 'true'%}
-    _TOOLHEAD_PARK_PAUSE_CANCEL
-  {% endif %}
 
   TURN_OFF_HEATERS
   CANCEL_PRINT_BASE
+  G28
 
-[gcode_macro M600]
+[gcode_macro M600] #Initiate filament change procedure
 gcode:
     {% set X = params.X|default(50)|float %}
     {% set Y = params.Y|default(0)|float %}
@@ -315,21 +301,10 @@ gcode:
     G1 E-50 F1000
     RESTORE_GCODE_STATE NAME=M600_state
  
-[gcode_macro M900] ###Check
+[gcode_macro M900] #Linear advance factor
 gcode:
     {% set K = params.K|default(0)|float %}
 	SET_PRESSURE_ADVANCE ADVANCE={K}
-
-#[gcode_macro BED_MESH_CALIBRATE]
-#rename_existing: BASE_BED_MESH_CALIBRATE
-#gcode:
-#    #before the original gcode
-#    BED_MESH_CLEAR
-#    QUAD_GANTRY_LEVEL
-#    G1 X125 Y125 Z5 F6000
-#    #the original gcode
-#    BASE_BED_MESH_CALIBRATE
-#    #after the original gcode
 
 ######################################################################
 ######################################################################
@@ -367,22 +342,22 @@ release_gcode:
 #*# [bed_mesh default]
 #*# version = 1
 #*# points =
-#*# 	  3.268034, 3.268034, 3.268034, 3.268034, 3.268034, 3.268034, 3.268034, 3.268034, 3.268034
-#*# 	  2.865641, 2.865641, 2.865641, 2.813803, 2.731773, 2.773803, 3.045641, 3.045641, 3.045641
-#*# 	  2.822392, 2.822392, 2.536494, 2.518978, 2.189412, 2.468978, 2.546494, 2.832392, 2.832392
-#*# 	  2.134232, 2.134232, 2.014355, 2.123243, 2.203170, 2.213243, 2.414355, 2.724232, 2.724232
-#*# 	  2.644913, 2.448339, 2.035548, 1.983701, 2.058007, 2.183701, 2.365548, 2.578339, 3.034913
-#*# 	  2.518187, 2.518187, 2.206804, 2.094767, 2.123964, 2.214767, 2.396804, 2.678187, 2.678187
-#*# 	  2.614057, 2.614057, 2.437717, 2.264170, 2.224661, 2.284170, 2.577717, 2.804057, 2.804057
-#*# 	  2.723380, 2.723380, 2.723380, 2.627112, 2.484048, 2.497112, 2.753380, 2.753380, 2.753380
-#*# 	  2.853290, 2.853290, 2.853290, 2.853290, 2.853290, 2.853290, 2.853290, 2.853290, 2.853290
+#*# 	  4.158984, 4.158984, 4.158984, 4.158984, 4.158984, 4.158984, 4.158984, 4.158984, 4.158984
+#*# 	  3.628159, 3.628159, 3.628159, 3.445436, 3.429984, 3.535436, 3.878159, 3.878159, 3.878159
+#*# 	  3.451847, 3.451847, 3.097949, 2.841954, 2.877637, 3.011954, 3.197949, 3.721847, 3.721847
+#*# 	  3.142145, 3.142145, 2.784504, 2.642903, 2.641942, 2.692903, 2.954504, 3.432145, 3.432145
+#*# 	  3.613763, 2.975640, 2.656277, 2.415318, 2.388007, 2.505318, 2.796277, 3.255640, 3.873763
+#*# 	  3.074581, 3.074581, 2.628246, 2.453172, 2.397692, 2.463172, 2.808246, 3.244581, 3.244581
+#*# 	  3.317568, 3.317568, 2.865335, 2.717196, 2.555046, 2.657196, 2.945335, 3.357568, 3.357568
+#*# 	  3.119006, 3.119006, 3.119006, 2.895653, 2.846425, 3.025653, 3.229006, 3.229006, 3.229006
+#*# 	  3.367939, 3.367939, 3.367939, 3.367939, 3.367939, 3.367939, 3.367939, 3.367939, 3.367939
 #*# x_count = 9
 #*# y_count = 9
 #*# mesh_x_pps = 2
 #*# mesh_y_pps = 2
 #*# algo = bicubic
 #*# tension = 0.1
-#*# min_x = -40.0
-#*# max_x = 40.0
-#*# min_y = -40.01
-#*# max_y = 39.99
+#*# min_x = -49.99
+#*# max_x = 49.99
+#*# min_y = -50.01
+#*# max_y = 50.0
