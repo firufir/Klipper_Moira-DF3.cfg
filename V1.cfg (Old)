@@ -1,6 +1,6 @@
-###Test code for Moira DF3 with BigTreeTech SKR E3 mini V3. Thanks EntenPaule for the code base for Moira DF3 configuration code.
-###Error during calibration (Move out of range: 0.000 -0.000 -5.000 [0.000]).
-###Error due to arm_length & position_endstop not properly defined.
+### Test code for Moira DF3 with BigTreeTech SKR E3 mini V3. Thanks EntenPaule for the code base for Moira DF3 configuration code.
+### Error during calibration (Move out of range: 0.000 -0.000 -5.000 [0.000]).
+### Error due to arm_length & position_endstop not properly defined.
 
 
 # This file contains common pin mappings for the BIGTREETECH SKR mini
