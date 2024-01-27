@@ -1,0 +1,401 @@
+### Macro for LED lights are incomplete & will be discussed inside V3.
+
+# This file contains common pin mappings for the BIGTREETECH SKR mini
+# E3 v3.0. To use this config, the firmware should be compiled for the
+# STM32G0B1 with a "8KiB bootloader" and USB communication/USART.
+
+# The "make flash" command does not work on the SKR mini E3. Instead,
+# after running "make", copy the generated "out/klipper.bin" file to a
+# file named "firmware.bin" on an SD card and then restart the SKR
+# mini E3 with that SD card.
+
+######################################################################
+                   #  INCLUDE
+######################################################################
+######################################################################
+
+[include mainsail.cfg]
+
+[virtual_sdcard]
+path: ~/printer_data/gcodes
+
+[display_status]
+
+######################################################################
+######################################################################
+                  #  STEPPER HEATER / MOTOR
+######################################################################
+######################################################################
+
+[stepper_a]
+step_pin: PB13
+dir_pin: PB12
+enable_pin: !PB14
+microsteps: 16
+rotation_distance: 32
+homing_speed: 20
+position_endstop: 202.048007
+arm_length: 172.000
+endstop_pin: ^!PC0
+
+[tmc2209 stepper_a]
+uart_pin: PC11
+tx_pin: PC10
+uart_address: 0
+run_current: 0.4
+hold_current: 0.3
+stealthchop_threshold: 99999
+
+[stepper_b]
+step_pin: PB10
+dir_pin: PB2
+enable_pin: !PB11
+microsteps: 16
+rotation_distance: 32
+endstop_pin: ^!PC1
+
+[tmc2209 stepper_b]
+uart_pin: PC11
+tx_pin: PC10
+uart_address: 2
+run_current: 0.4
+hold_current: 0.3
+stealthchop_threshold: 99999
+
+[stepper_c]
+step_pin: PB0
+dir_pin: PC5
+enable_pin: !PB1
+microsteps: 16
+rotation_distance: 32
+endstop_pin: ^!PC2
+
+[tmc2209 stepper_c]
+uart_pin: PC11
+tx_pin: PC10
+uart_address: 1
+run_current: 0.4
+hold_current: 0.3
+stealthchop_threshold: 99999
+
+######################################################################
+######################################################################
+                  #  EXTRUDER HEATER / MOTOR
+######################################################################
+######################################################################
+
+[extruder]
+step_pin: PB3
+dir_pin: !PB4
+enable_pin: !PD1 
+microsteps: 16
+rotation_distance: 32.600
+max_extrude_only_accel: 35 
+max_extrude_only_distance: 110 
+nozzle_diameter: 0.400
+filament_diameter: 1.750
+heater_pin: PC8
+sensor_type: Generic 3950
+sensor_pin: PA0
+control: pid
+pid_kp: 23.981
+pid_ki: 1.038
+pid_kd: 138.493
+min_temp: 5
+max_temp: 280
+pressure_advance: 0.54
+
+[tmc2209 extruder]
+uart_pin: PC11
+tx_pin: PC10
+uart_address: 3
+run_current: 0.4
+hold_current: 0.3
+stealthchop_threshold: 5
+
+######################################################################
+######################################################################
+                  #  FAN
+######################################################################
+######################################################################
+
+[heater_fan nozzle_cooling_fan]
+pin: PC7
+
+[heater_fan nozzle_cooling_fan 1]
+pin: PC6 
+#kick_start_time: 0.500
+#heater: extruder
+#heater_temp: 50.0
+
+[heater_fan nozzle_cooling_fan 2]
+pin: PB15
+#kick_start_time: 0.500
+#heater: extruder
+#heater_temp: 50.0
+
+#[controller_fan mainboard_fan]
+#pin: ?
+#max_power: 1
+#cycle_time: 0.01
+#kick_start_time:0.2
+#fan_speed: 0.6
+#heater: extruder
+
+######################################################################
+######################################################################
+                  #  MCU
+######################################################################
+######################################################################
+
+[mcu]
+serial: /dev/serial/by-id/usb-Klipper_stm32g0b1xx_49000B0011504B5735313920-if00
+
+######################################################################
+######################################################################
+                  #  TEMPERATURE-SENSORS
+######################################################################
+######################################################################
+
+[temperature_sensor Raspberry_Pi]
+sensor_type: temperature_host
+min_temp: 10
+max_temp: 80
+
+[temperature_sensor MCU]
+sensor_type: temperature_mcu
+min_temp: 10
+max_temp: 80
+
+######################################################################
+######################################################################
+                  #  PRINTER 
+######################################################################
+######################################################################
+
+[printer]
+kinematics: delta
+max_velocity: 300
+max_accel: 1200
+max_accel_to_decel: 480
+max_z_velocity: 60
+max_z_accel: 100
+minimum_z_position: -5
+delta_radius: 75
+
+######################################################################
+######################################################################
+                  #  BED LEVELLING & PROBE
+######################################################################
+######################################################################
+
+#[probe]
+#pin: ^!PC14
+#z_offset: 0 #-1.100
+#samples: 3
+#sample_result: median
+#sample_retraction distance: 3
+#sample_tolerance: 0.005
+#sample_tolerance_retries: 3
+
+[delta_calibrate] ### For manual delta probe calibration
+radius: 65
+speed: 120
+horizontal_move_z: 10
+
+#[bed_mesh]
+#speed: 120
+#horizontal_move_z: 10
+#mesh_radius: 65
+#mesh_origin: 0, 0
+#round_probe_count: 5 ### Max value for lagrange interpolation
+
+######################################################################
+######################################################################
+                   #  BOARD-PINS
+######################################################################
+######################################################################
+
+[board_pins]
+aliases:
+    # EXP1 header
+  EXP1_1=PB5,  EXP1_3=PA9,   EXP1_5=PA10, EXP1_7=PB8, EXP1_9=<GND>,
+  EXP1_2=PA15, EXP1_4=<RST>, EXP1_6=PB9,  EXP1_8=PD6, EXP1_10=<5V>
+
+######################################################################
+######################################################################
+                    #   Macros
+######################################################################
+######################################################################
+
+[gcode_macro LOAD_FILAMENT]
+gcode:
+  M83
+  G1 E50 F1800
+  G1 E30 F300
+  G1 E20 F60
+  M82
+
+[gcode_macro UNLOAD_FILAMENT]
+gcode:
+  M83
+  G1 E10 F300
+  G1 E-50 F1800
+  G1 E-50 F300
+  M82
+
+[pause_resume]
+
+[gcode_macro PAUSE]
+description: Pause the actual running print
+rename_existing: PAUSE_BASE
+gcode:
+  PAUSE_BASE
+  _TOOLHEAD_PARK_PAUSE_CANCEL
+
+[gcode_macro RESUME]
+description: Resume the actual running print
+rename_existing: RESUME_BASE
+gcode:
+### Read extrude from _TOOLHEAD_PARK_PAUSE_CANCEL macro
+  {% set extrude = printer['gcode_macro _TOOLHEAD_PARK_PAUSE_CANCEL'].extrude %}
+### Get VELOCITY parameter if specified
+  {% if 'VELOCITY' in params|upper %}
+    {% set get_params = ('VELOCITY=' + params.VELOCITY)  %}
+  {%else %}
+    {% set get_params = "" %}
+  {% endif %}
+### End of definitions
+  {% if printer.extruder.can_extrude|lower == 'true' %}
+    M83
+    G1 E{extrude} F2100
+    {% if printer.gcode_move.absolute_extrude |lower == 'true' %} M82 {% endif %}
+  {% else %}
+    {action_respond_info("Extruder not hot enough")}
+  {% endif %}
+  
+  RESUME_BASE {get_params}
+  
+[gcode_macro CANCEL_PRINT]
+description: Cancel the actual running print
+rename_existing: CANCEL_PRINT_BASE
+variable_park: True
+gcode:
+### Move head and retract only if not already in the pause state and park set to true
+  {% if printer.pause_resume.is_paused|lower == 'false' and park|lower == 'true'%}
+    _TOOLHEAD_PARK_PAUSE_CANCEL
+  {% endif %}
+
+  TURN_OFF_HEATERS
+  CANCEL_PRINT_BASE
+  G28
+
+[gcode_macro _TOOLHEAD_PARK_PAUSE_CANCEL]
+description: Helper; park toolhead used in PAUSE and CANCEL_PRINT
+variable_extrude: 1.0
+gcode:
+### Set park positon for x and y
+### Default is your max posion from your printer.cfg
+  {% set x_park = printer.toolhead.axis_maximum.x|float / 2 %}
+  {% set y_park = printer.toolhead.axis_maximum.y %}
+  {% set z_park_delta = 2.0 %}
+### Calculate save lift position
+  {% set max_z = printer.toolhead.axis_maximum.z|float %}
+  {% set act_z = printer.toolhead.position.z|float %}
+  {% if act_z < (max_z - z_park_delta) %}
+    {% set z_safe = z_park_delta %}
+  {% else %}
+    {% set z_safe = max_z - act_z %}
+  {% endif %}
+### End of definitions
+  {% if printer.extruder.can_extrude|lower == 'true' %}
+    M83
+    G1 E-{extrude} F2100
+    {% if printer.gcode_move.absolute_extrude |lower == 'true' %} M82 {% endif %}
+  {% else %}
+    {action_respond_info("Extruder not hot enough")}
+  {% endif %}
+  {% if "xyz" in printer.toolhead.homed_axes %}
+    G91
+    G1 Z{z_safe} F900
+    G90
+    G1 X{x_park} Y{y_park} F6000
+    {% if printer.gcode_move.absolute_coordinates|lower == 'false' %} G91 {% endif %}
+  {% else %}
+    {action_respond_info("Printer not homed")}
+  {% endif %}
+  {% if printer["gcode_macro status_ready"] != null %}
+    status_ready
+  {% endif %}\
+
+######################################################################
+######################################################################
+                   ###   KNÖPFE  ###
+######################################################################
+######################################################################
+
+### Study more the entries of the macros here.
+[gcode_macro _buttonBlocker]
+variable_init: 0
+gcode:
+
+[delayed_gcode init_gcodeButtons]
+initial_duration: 2.
+gcode:
+   SET_GCODE_VARIABLE MACRO=_buttonBlocker VARIABLE=init VALUE=1
+
+[gcode_button play]
+pin: ^!PC13
+press_gcode:
+   {% if printer["gcode_macro _buttonBlocker"].init %}
+      { action_respond_info("Button 'Resume/Pause' pressed.") }
+      {% if printer.idle_timeout.state == "Printing" %}
+         PAUSE
+      { action_respond_info("Button 'PAUSE' pressed.") }
+         {% else %}
+      { action_respond_info("Button 'Resume' pressed.") }
+         RESUME
+      {% endif %}
+   {% endif %}
+release_gcode:
+
+#*# <---------------------- SAVE_CONFIG ---------------------->
+#*# DO NOT EDIT THIS BLOCK OR BELOW. The contents are auto-generated.
+#*#
+#*# [bed_mesh 3/1/2023]
+#*# version = 1
+#*# points =
+#*# 	4.021115, 4.021115, 4.021115, 4.021115, 4.021115
+#*# 	3.426141, 3.426141, 3.341591, 3.776141, 3.776141
+#*# 	3.528798, 3.134622, 3.058007, 3.474622, 4.268798
+#*# 	3.352599, 3.352599, 3.214143, 3.522599, 3.522599
+#*# 	3.843028, 3.843028, 3.843028, 3.843028, 3.843028
+#*# x_count = 5
+#*# y_count = 5
+#*# mesh_x_pps = 2
+#*# mesh_y_pps = 2
+#*# algo = lagrange
+#*# tension = 0.2
+#*# min_x = -50.0
+#*# max_x = 50.0
+#*# min_y = -49.99
+#*# max_y = 49.99
+#*#
+#*# [bed_mesh Active]
+#*# version = 1
+#*# points =
+#*# 	  4.327027, 4.327027, 4.327027, 4.327027, 4.327027
+#*# 	  3.584408, 3.584408, 3.483699, 4.234408, 4.234408
+#*# 	  3.696502, 3.163914, 3.043007, 3.713914, 4.826502
+#*# 	  3.564353, 3.564353, 3.383297, 3.824353, 3.824353
+#*# 	  4.331002, 4.331002, 4.331002, 4.331002, 4.331002
+#*# x_count = 5
+#*# y_count = 5
+#*# mesh_x_pps = 2
+#*# mesh_y_pps = 2
+#*# algo = lagrange
+#*# tension = 0.2
+#*# min_x = -65.0
+#*# max_x = 65.0
+#*# min_y = -65.0
+#*# max_y = 65.0
