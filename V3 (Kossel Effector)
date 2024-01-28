@@ -122,20 +122,20 @@ stealthchop_threshold: 5
 [heater_fan nozzle_cooling_fan]
 pin: PC7
 
-[heater_fan nozzle_cooling_fan 1]
-pin: PC6 
+#[heater_fan nozzle_cooling_fan 1]
+#pin: PC6 
 #kick_start_time: 0.500
 #heater: extruder
 #heater_temp: 50.0
 
-[heater_fan nozzle_cooling_fan 2]
-pin: PB15
+#[heater_fan nozzle_cooling_fan 2]
+#pin: PB15
 #kick_start_time: 0.500
 #heater: extruder
 #heater_temp: 50.0
 
 #[controller_fan mainboard_fan]
-#pin: ?
+#pin:
 #max_power: 1
 #cycle_time: 0.01
 #kick_start_time:0.2
@@ -189,6 +189,11 @@ delta_radius: 75
 ######################################################################
 ######################################################################
 
+[delta_calibrate] ### For manual delta probe calibration
+radius: 65
+speed: 120
+horizontal_move_z: 10
+
 #[probe]
 #pin: ^!PC14
 #z_offset: 0 #-1.100
@@ -197,11 +202,6 @@ delta_radius: 75
 #sample_retraction distance: 3
 #sample_tolerance: 0.005
 #sample_tolerance_retries: 3
-
-[delta_calibrate] ### For manual delta probe calibration
-radius: 65
-speed: 120
-horizontal_move_z: 10
 
 #[bed_mesh]
 #speed: 120
@@ -358,44 +358,3 @@ press_gcode:
       {% endif %}
    {% endif %}
 release_gcode:
-
-#*# <---------------------- SAVE_CONFIG ---------------------->
-#*# DO NOT EDIT THIS BLOCK OR BELOW. The contents are auto-generated.
-#*#
-#*# [bed_mesh 3/1/2023]
-#*# version = 1
-#*# points =
-#*# 	4.021115, 4.021115, 4.021115, 4.021115, 4.021115
-#*# 	3.426141, 3.426141, 3.341591, 3.776141, 3.776141
-#*# 	3.528798, 3.134622, 3.058007, 3.474622, 4.268798
-#*# 	3.352599, 3.352599, 3.214143, 3.522599, 3.522599
-#*# 	3.843028, 3.843028, 3.843028, 3.843028, 3.843028
-#*# x_count = 5
-#*# y_count = 5
-#*# mesh_x_pps = 2
-#*# mesh_y_pps = 2
-#*# algo = lagrange
-#*# tension = 0.2
-#*# min_x = -50.0
-#*# max_x = 50.0
-#*# min_y = -49.99
-#*# max_y = 49.99
-#*#
-#*# [bed_mesh Active]
-#*# version = 1
-#*# points =
-#*# 	  4.327027, 4.327027, 4.327027, 4.327027, 4.327027
-#*# 	  3.584408, 3.584408, 3.483699, 4.234408, 4.234408
-#*# 	  3.696502, 3.163914, 3.043007, 3.713914, 4.826502
-#*# 	  3.564353, 3.564353, 3.383297, 3.824353, 3.824353
-#*# 	  4.331002, 4.331002, 4.331002, 4.331002, 4.331002
-#*# x_count = 5
-#*# y_count = 5
-#*# mesh_x_pps = 2
-#*# mesh_y_pps = 2
-#*# algo = lagrange
-#*# tension = 0.2
-#*# min_x = -65.0
-#*# max_x = 65.0
-#*# min_y = -65.0
-#*# max_y = 65.0
