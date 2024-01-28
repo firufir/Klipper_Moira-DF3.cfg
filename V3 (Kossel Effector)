@@ -34,8 +34,8 @@ enable_pin: !PB14
 microsteps: 16
 rotation_distance: 32
 homing_speed: 20
-position_endstop: 202.048007
-arm_length: 172.000
+#position_endstop: 202.048007
+#arm_length: 172.000
 endstop_pin: ^!PC0
 
 [tmc2209 stepper_a]
@@ -181,7 +181,7 @@ max_accel_to_decel: 480
 max_z_velocity: 60
 max_z_accel: 100
 minimum_z_position: -5
-delta_radius: 75
+#delta_radius: 75
 
 ######################################################################
 ######################################################################
@@ -358,3 +358,40 @@ press_gcode:
       {% endif %}
    {% endif %}
 release_gcode:
+
+#*# <---------------------- SAVE_CONFIG ---------------------->
+#*# DO NOT EDIT THIS BLOCK OR BELOW. The contents are auto-generated.
+#*#
+#*# [printer]
+#*# delta_radius = 85.283604
+#*#
+#*# [stepper_a]
+#*# angle = 210.284370
+#*# arm_length = 172.000000
+#*# position_endstop = 195.959853
+#*#
+#*# [stepper_b]
+#*# angle = 327.762631
+#*# arm_length = 172.000000
+#*# position_endstop = 194.281443
+#*#
+#*# [stepper_c]
+#*# angle = 90.000000
+#*# arm_length = 172.000000
+#*# position_endstop = 195.196529
+#*#
+#*# [delta_calibrate]
+#*# height0 = 0.0
+#*# height0_pos = 19514.000,19514.000,19514.000
+#*# height1 = 0.0
+#*# height1_pos = 22257.000,22257.000,17564.000
+#*# height2 = 0.0
+#*# height2_pos = 18996.000,23938.000,18996.000
+#*# height3 = 0.0
+#*# height3_pos = 17707.000,21846.000,21846.000
+#*# height4 = 0.0
+#*# height4_pos = 18887.000,18887.000,22520.000
+#*# height5 = 0.0
+#*# height5_pos = 21364.000,17754.000,21364.000
+#*# height6 = 0.0
+#*# height6_pos = 23184.000,18923.000,18923.000
