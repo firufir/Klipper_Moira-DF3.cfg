@@ -34,8 +34,8 @@ enable_pin: !PB14
 microsteps: 16
 rotation_distance: 32
 homing_speed: 20
-#position_endstop: 202.048007
-#arm_length: 172.000
+#position_endstop: 200.000
+#arm_length: 200.000
 endstop_pin: ^!PC0
 
 [tmc2209 stepper_a]
@@ -52,6 +52,7 @@ dir_pin: PB2
 enable_pin: !PB11
 microsteps: 16
 rotation_distance: 32
+#arm_length: 200.000 
 endstop_pin: ^!PC1
 
 [tmc2209 stepper_b]
@@ -68,6 +69,7 @@ dir_pin: PC5
 enable_pin: !PB1
 microsteps: 16
 rotation_distance: 32
+#arm_length: 200.000 
 endstop_pin: ^!PC2
 
 [tmc2209 stepper_c]
@@ -89,18 +91,18 @@ step_pin: PB3
 dir_pin: !PB4
 enable_pin: !PD1 
 microsteps: 16
-rotation_distance: 32.600
+rotation_distance: 33.000
 max_extrude_only_accel: 35 
 max_extrude_only_distance: 110 
 nozzle_diameter: 0.400
 filament_diameter: 1.750
 heater_pin: PC8
-sensor_type: Generic 3950
+sensor_type: NTC 100K MGB18-104F39050L32 #Generic 3950
 sensor_pin: PA0
 control: pid
-pid_kp: 23.981
-pid_ki: 1.038
-pid_kd: 138.493
+pid_kp: 19.189
+pid_ki: 0.723
+pid_kd: 127.366
 min_temp: 5
 max_temp: 280
 pressure_advance: 0.54
@@ -119,20 +121,22 @@ stealthchop_threshold: 5
 ######################################################################
 ######################################################################
 
-[heater_fan nozzle_cooling_fan]
+[heater_fan nozzle_cooling_fan 1]
 pin: PC7
+kick_start_time: 0.500
+heater: extruder
 
-#[heater_fan nozzle_cooling_fan 1]
-#pin: PC6 
-#kick_start_time: 0.500
-#heater: extruder
-#heater_temp: 50.0
+[heater_fan nozzle_cooling_fan 2]
+pin: PC6 
+kick_start_time: 0.500
+heater: extruder
+heater_temp: 50.0
 
-#[heater_fan nozzle_cooling_fan 2]
-#pin: PB15
-#kick_start_time: 0.500
-#heater: extruder
-#heater_temp: 50.0
+[heater_fan nozzle_cooling_fan 3]
+pin: PB15
+kick_start_time: 0.500
+heater: extruder
+heater_temp: 50.0
 
 #[controller_fan mainboard_fan]
 #pin:
@@ -363,35 +367,35 @@ release_gcode:
 #*# DO NOT EDIT THIS BLOCK OR BELOW. The contents are auto-generated.
 #*#
 #*# [printer]
-#*# delta_radius = 85.283604
+#*# delta_radius = 90.738025
 #*#
 #*# [stepper_a]
-#*# angle = 210.284370
-#*# arm_length = 172.000000
-#*# position_endstop = 195.959853
+#*# angle = 208.545253
+#*# arm_length = 200.000000
+#*# position_endstop = 196.166414
 #*#
 #*# [stepper_b]
-#*# angle = 327.762631
-#*# arm_length = 172.000000
-#*# position_endstop = 194.281443
+#*# angle = 328.354432
+#*# arm_length = 200.000000
+#*# position_endstop = 194.867575
 #*#
 #*# [stepper_c]
 #*# angle = 90.000000
-#*# arm_length = 172.000000
-#*# position_endstop = 195.196529
+#*# arm_length = 200.000000
+#*# position_endstop = 195.739083
 #*#
 #*# [delta_calibrate]
 #*# height0 = 0.0
-#*# height0_pos = 19514.000,19514.000,19514.000
+#*# height0_pos = 19560.000,19560.000,19560.000
 #*# height1 = 0.0
-#*# height1_pos = 22257.000,22257.000,17564.000
+#*# height1_pos = 21667.000,21667.000,17814.000
 #*# height2 = 0.0
-#*# height2_pos = 18996.000,23938.000,18996.000
+#*# height2_pos = 19001.000,22908.000,19001.000
 #*# height3 = 0.0
-#*# height3_pos = 17707.000,21846.000,21846.000
+#*# height3_pos = 17948.000,21364.000,21364.000
 #*# height4 = 0.0
-#*# height4_pos = 18887.000,18887.000,22520.000
+#*# height4_pos = 19001.000,19001.000,21938.000
 #*# height5 = 0.0
-#*# height5_pos = 21364.000,17754.000,21364.000
+#*# height5_pos = 21026.000,18034.000,21026.000
 #*# height6 = 0.0
-#*# height6_pos = 23184.000,18923.000,18923.000
+#*# height6_pos = 22400.000,18990.000,18990.000
