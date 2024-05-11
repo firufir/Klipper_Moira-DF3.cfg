@@ -91,7 +91,7 @@ step_pin: PB3
 dir_pin: !PB4
 enable_pin: !PD1 
 microsteps: 16
-rotation_distance: 33.000
+rotation_distance: 32.900 #32.600
 max_extrude_only_accel: 35 
 max_extrude_only_distance: 110 
 nozzle_diameter: 0.400
