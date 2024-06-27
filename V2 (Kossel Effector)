@@ -29,7 +29,7 @@ path: ~/printer_data/gcodes
 
 [stepper_a]
 step_pin: PB13
-dir_pin: PB12
+dir_pin: !PB12
 enable_pin: !PB14
 microsteps: 16
 rotation_distance: 32
@@ -48,7 +48,7 @@ stealthchop_threshold: 99999
 
 [stepper_b]
 step_pin: PB10
-dir_pin: PB2
+dir_pin: !PB2
 enable_pin: !PB11
 microsteps: 16
 rotation_distance: 32
@@ -65,7 +65,7 @@ stealthchop_threshold: 99999
 
 [stepper_c]
 step_pin: PB0
-dir_pin: PC5
+dir_pin: !PC5
 enable_pin: !PB1
 microsteps: 16
 rotation_distance: 32
@@ -91,7 +91,7 @@ step_pin: PB3
 dir_pin: !PB4
 enable_pin: !PD1 
 microsteps: 16
-rotation_distance: 32.900 #32.600
+rotation_distance: 7.900
 max_extrude_only_accel: 35 
 max_extrude_only_distance: 110 
 nozzle_diameter: 0.400
@@ -113,7 +113,7 @@ tx_pin: PC10
 uart_address: 3
 run_current: 0.4
 hold_current: 0.3
-stealthchop_threshold: 5
+stealthchop_threshold: 99999
 
 ######################################################################
 ######################################################################
@@ -137,14 +137,6 @@ pin: PB15
 kick_start_time: 0.500
 heater: extruder
 heater_temp: 50.0
-
-#[controller_fan mainboard_fan]
-#pin:
-#max_power: 1
-#cycle_time: 0.01
-#kick_start_time:0.2
-#fan_speed: 0.6
-#heater: extruder
 
 ######################################################################
 ######################################################################
@@ -193,26 +185,26 @@ minimum_z_position: -5
 ######################################################################
 ######################################################################
 
-[delta_calibrate] ### For manual delta probe calibration
-radius: 65
-speed: 120
+[delta_calibrate] 
+radius: 60
+speed: 100
+horizontal_move_z: 10 
+
+[bltouch]
+sensor_pin: ^PC14
+control_pin: PA1
+#x_offset: -36.500 
+#y_offset: -22.500 
+#z_offset: 0
+samples: 3
+speed: 10
+
+[bed_mesh]
+speed: 100
 horizontal_move_z: 10
-
-#[probe]
-#pin: ^!PC14
-#z_offset: 0 #-1.100
-#samples: 3
-#sample_result: median
-#sample_retraction distance: 3
-#sample_tolerance: 0.005
-#sample_tolerance_retries: 3
-
-#[bed_mesh]
-#speed: 120
-#horizontal_move_z: 10
-#mesh_radius: 65
-#mesh_origin: 0, 0
-#round_probe_count: 5 ### Max value for lagrange interpolation
+mesh_radius: 35
+mesh_origin: 0, 0
+round_probe_count: 5
 
 ######################################################################
 ######################################################################
@@ -367,35 +359,57 @@ release_gcode:
 #*# DO NOT EDIT THIS BLOCK OR BELOW. The contents are auto-generated.
 #*#
 #*# [printer]
-#*# delta_radius = 90.738025
+#*# delta_radius = 91.441295
 #*#
 #*# [stepper_a]
-#*# angle = 208.545253
+#*# angle = 210.464906
 #*# arm_length = 200.000000
-#*# position_endstop = 196.166414
+#*# position_endstop = 196.958
 #*#
 #*# [stepper_b]
-#*# angle = 328.354432
+#*# angle = 329.600436
 #*# arm_length = 200.000000
-#*# position_endstop = 194.867575
+#*# position_endstop = 196.789
 #*#
 #*# [stepper_c]
 #*# angle = 90.000000
 #*# arm_length = 200.000000
-#*# position_endstop = 195.739083
+#*# position_endstop = 196.591
+#*#
+#*# [bltouch]
+#*# z_offset = 0.401
+#*#
+#*# [bed_mesh default]
+#*# version = 1
+#*# points =
+#*# 	0.466357, 0.466357, 0.466357, 0.466357, 0.466357
+#*# 	0.494556, 0.494556, 0.493033, 0.548964, 0.548964
+#*# 	0.584281, 0.571971, 0.553397, 0.576894, 0.621795
+#*# 	0.643474, 0.643474, 0.602374, 0.578839, 0.578839
+#*# 	0.830196, 0.830196, 0.830196, 0.830196, 0.830196
+#*# x_count = 5
+#*# y_count = 5
+#*# mesh_x_pps = 2
+#*# mesh_y_pps = 2
+#*# algo = lagrange
+#*# tension = 0.2
+#*# min_x = -35.0
+#*# max_x = 35.0
+#*# min_y = -35.0
+#*# max_y = 35.0
 #*#
 #*# [delta_calibrate]
 #*# height0 = 0.0
-#*# height0_pos = 19560.000,19560.000,19560.000
+#*# height0_pos = 19340.000,19824.000,19714.000
 #*# height1 = 0.0
-#*# height1_pos = 21667.000,21667.000,17814.000
+#*# height1_pos = 21852.000,22363.000,17718.000
 #*# height2 = 0.0
-#*# height2_pos = 19001.000,22908.000,19001.000
+#*# height2_pos = 18903.000,24058.000,19284.000
 #*# height3 = 0.0
-#*# height3_pos = 17948.000,21364.000,21364.000
+#*# height3_pos = 17720.000,22197.000,22104.000
 #*# height4 = 0.0
-#*# height4_pos = 19001.000,19001.000,21938.000
+#*# height4_pos = 18812.000,19280.000,22678.000
 #*# height5 = 0.0
-#*# height5_pos = 21026.000,18034.000,21026.000
+#*# height5_pos = 21068.000,18030.000,21435.000
 #*# height6 = 0.0
-#*# height6_pos = 22400.000,18990.000,18990.000
+#*# height6_pos = 22668.000,19100.000,18977.000
